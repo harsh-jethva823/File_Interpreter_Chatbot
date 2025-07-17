@@ -1,22 +1,27 @@
 from flask import Flask, render_template_string, request
 import google.generativeai as genai
+from dotenv import load_dotenv
 import os
+
+# Load environment variables from .env file
+load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
+
+# Configure Gemini API
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 app = Flask(__name__)
 
-# Configure Gemini API
-genai.configure(api_key="AIzaSyCOYJIhNLGDZ5WHKyydveQ2UU0__SC92eM")  # Replace with your real key
-model = genai.GenerativeModel('gemini-1.5-flash')
-
-# HTML + JS Frontend in a single page
+# HTML template
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title> File Interpreter Chatbot</title>
+    <title>File Interpreter Chatbot</title>
 </head>
 <body style="font-family:Arial; padding:20px;">
-    <h2>📄 Gemini Chatbot with File Insight</h2>
+    <h2>📄 Chatbot with File Insight</h2>
     <form method="POST" enctype="multipart/form-data">
         <label>Upload File:</label>
         <input type="file" name="file" required>
